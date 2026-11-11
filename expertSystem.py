@@ -1,9 +1,3 @@
-'''
- Sistema Experto para el guiado de un robot
- Versión primitiva: ir de punto a punto, frenando hasta velocidad 0 en cada uno,
- girar sobre su propio eje hacia el siguiente punto y repetir.
-'''
-
 import math
 from objetivo import *
 
@@ -11,11 +5,10 @@ class ExpertSystem:
     def __init__(self) -> None:
         self.objetivoActual = None
         self.nombreAlumno = "Martín Echegaray Ojeda"
-        self.paso = 0          # índice del punto al que va el robot dentro del objetivo
-        self.girando = True    # True mientras gira sobre su eje hacia el punto
+        self.paso = 0          
+        self.girando = True    
 
-    # función setObjetivo
-    #   Almacena el objetivo y reinicia el punto al que se dirige el robot
+
     def setObjetivo(self, objetivo):
         self.objetivoActual = objetivo
         self.paso = 0
@@ -25,7 +18,6 @@ class ExpertSystem:
     #   Recibe la pose del robot (x, y, orientación en grados, v actual, w actual)
     #   Devuelve (velocidad lineal, velocidad angular)
     def tomarDecision(self, poseRobot):
-        # Lista de puntos a recorrer: la recta tiene 2 y el triángulo 3
         puntos = [self.objetivoActual.getInicio()]
         if self.objetivoActual.getType() == 2:
             puntos.append(self.objetivoActual.getMedio())
@@ -33,7 +25,6 @@ class ExpertSystem:
 
         destino = puntos[self.paso]
 
-        # Distancia al punto y error de ángulo (en radianes, entre -pi y pi)
         dx = destino[0] - poseRobot[0]
         dy = destino[1] - poseRobot[1]
         distancia = math.hypot(dx, dy)
@@ -49,9 +40,9 @@ class ExpertSystem:
 
         # 2) Girar sobre su eje (v = 0) hasta mirar hacia el punto
         if self.girando:
-            if abs(error) < 0.035:   # unos 2 grados
+            if abs(error) < 0.035:   
                 self.girando = False
-            w = min(1, math.sqrt(0.8 * abs(error)))   # gira rápido y frena al acercarse
+            w = min(1, math.sqrt(0.8 * abs(error)))   
             if error < 0:
                 w = -w
             return (0, w)
@@ -60,5 +51,5 @@ class ExpertSystem:
         v = math.sqrt(1.8 * max(distancia - 0.45, 0))
         if v > 3:
             v = 3
-        w = 2 * error   # pequeña corrección para ir en línea recta
+        w = 2 * error   
         return (v, w)
