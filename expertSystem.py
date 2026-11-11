@@ -2,7 +2,6 @@
  Sistema Experto para el guiado de un robot
  Versión primitiva: ir de punto a punto, frenando hasta velocidad 0 en cada uno,
  girar sobre su propio eje hacia el siguiente punto y repetir.
- Los triángulos se tratan como dos rectas (inicio -> medio -> fin).
 '''
 
 import math
@@ -11,7 +10,7 @@ from objetivo import *
 class ExpertSystem:
     def __init__(self) -> None:
         self.objetivoActual = None
-        self.nombreAlumno = "Invalido" #IMPORTANTE: Cambia el valor de esta propiedad por tu nombre completo
+        self.nombreAlumno = "Martín Echegaray Ojeda"
         self.paso = 0          # índice del punto al que va el robot dentro del objetivo
         self.girando = True    # True mientras gira sobre su eje hacia el punto
 
